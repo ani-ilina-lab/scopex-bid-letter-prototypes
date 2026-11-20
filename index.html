@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScopeX · Bid letter prototype</title>
+<style>
+:root{--nav:#183c53;--paper:#fafaff;--bg:#f7f7fb;--ink:#232337;--muted:#62627b;--gold:#877136;--gold-text:#795e12;--gold-light:#eeebe3;--line:#d3d2da;--blue-gray:#e0e6eb;--focus:#316eaf;font-family:Inter,Arial,sans-serif;color:var(--ink);background:var(--bg);font-size:14px}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0}button,input,select{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.48}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--focus);outline-offset:2px}button,select{max-width:100%}button.icon{display:grid;place-items:center;padding:4px;width:32px;height:32px;border:0;background:transparent;border-radius:50%;font-size:20px;flex:none}button.icon:hover{background:#dce1ea88}.icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.pill{border:1px solid var(--gold);border-radius:100px;padding:3px 9px;color:var(--gold-text);background:transparent;font-weight:650;line-height:1.2;min-height:25px}.pill:hover{background:#ece7da}.primary{background:var(--gold);color:var(--paper)}.primary:hover{background:#715d28}.text-button{padding:5px 8px;border:0;border-radius:5px;background:none;color:var(--gold-text);font-weight:600}.text-button:hover{background:var(--gold-light)}
+.demo{display:flex;gap:10px 20px;flex-wrap:wrap;align-items:center;padding:8px 24px;background:#eef2f6;border-bottom:1px solid #d8dfe7;font-size:12px}.demo strong{margin-right:5px}.demo label{display:flex;align-items:center;gap:5px}.demo .reset{margin-left:auto}.demo select{padding:3px 6px;border:1px solid #c2cbd7;border-radius:4px;background:white}input[type=checkbox]{accent-color:var(--gold);margin:0;width:16px;height:16px;flex:none}
+.app-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:48px;background:var(--nav);color:var(--paper);padding:0 24px;gap:16px}.brand{display:flex;align-items:center;gap:19px;font-size:20px;letter-spacing:-.25px}.tile-icon{font-size:21px;line-height:1}.nav{display:flex;align-items:stretch;height:100%;white-space:nowrap}.nav span{display:grid;place-items:center;padding:0 12px;font-weight:600}.nav .selected{background:#ffffff20;box-shadow:inset 0 -3px #9a884f}.profile{justify-self:end;background:var(--paper);color:var(--ink);padding:3px 12px;border-radius:7px;min-width:160px;display:flex;align-items:center;justify-content:space-between;gap:20px}.profile small{display:block;color:var(--muted);font-size:11px}
+.project{display:flex;gap:13px;align-items:center;padding:12px 27px;height:48px;font-size:16px;font-weight:700}.project i{color:var(--muted);font-style:normal;font-weight:400}.workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;padding:8px 24px 20px 48px;min-height:calc(100dvh - 135px)}.workspace.full{grid-template-columns:1fr}.workspace.full .calculation{display:none}.workspace.full .letter-body{max-width:900px;margin:auto}.workspace.closed{grid-template-columns:1fr}.workspace.closed .letter{display:none}
+.calculation{min-width:0;position:relative}.calc-head,.toolbar,.letter-title,.editor-actions,.footer{display:flex;align-items:center;gap:8px}.calc-head,.letter-title{justify-content:space-between}.calc-head h2,.letter h1{margin:0;font-size:19px}.calc-head h2{font-size:16px}.calc-head small{display:block;margin-top:4px;color:var(--muted)}.calc-nav{display:flex;align-items:center;justify-content:space-between;margin-top:15px;gap:8px}.segments{display:flex;white-space:nowrap}.segments span{padding:3px 7px;border:1px solid #d7d2c1;color:var(--gold-text);font-weight:600;line-height:1}.segments span:first-child{border-radius:4px 0 0 4px}.segments span:last-child{border-radius:0 4px 4px 0}.segments .active{background:var(--gold);color:white;border-color:var(--gold)}
+.depts{margin:20px 0 16px}.dept-tabs{display:flex;align-items:center;gap:10px;padding-left:5px;color:var(--gold-text);font-weight:600}.dept-tabs span:first-child{background:var(--gold-light);padding:8px 11px;border-radius:10px 10px 0 0}.dept-links{display:flex;align-items:center;flex-wrap:wrap;gap:9px 0;background:var(--gold-light);padding:12px 7px;border-radius:10px;font-weight:600}.dept-links span{padding:3px 8px;border-right:1px solid #d2cfc8;text-decoration:underline;text-underline-offset:2px}.dept-links span:last-child{border:0}
+.calc-card{border:1px solid var(--line);border-radius:11px;overflow:hidden}.metrics{padding:20px 9px 11px;color:var(--muted);font-size:12px}.metrics-head{display:flex;justify-content:space-between;gap:6px;padding-bottom:10px;font-size:12px}.metrics-head strong{color:var(--ink)}.metric-row{display:flex;flex-wrap:wrap;gap:13px;margin-bottom:9px}.metric-row:last-child{margin-bottom:0}.metric-row b{display:block;color:var(--ink)}.metric-row.planned span:first-child,.metric-row.planned span:first-child b{color:#6037a4}.metric-row.actual span:first-child,.metric-row.actual span:first-child b{color:#286caa}.calc-grid{border-collapse:collapse;border-spacing:0;width:100%;font-size:12px}.calc-grid td,.calc-grid th{border:1px solid #c9ced6;padding:3px 7px;text-align:left}.calc-grid th{background:#dfe4ec}.calc-grid .band th{font-size:13px;padding:6px 8px;border-inline:0}.calc-grid .collapse{color:var(--gold-text)}.calc-grid .section th{padding:8px;font-size:14px}.calc-grid .money{color:#305d56;text-align:right}.calc-grid .spacer td{height:16px;border:0}.calc-grid .num{text-align:center;color:var(--muted)}.sheet-tabs{display:flex;gap:5px;justify-content:flex-end;padding:10px;font-size:11px;flex-wrap:wrap}.sheet-tabs span{padding:2px 6px;background:white;border:1px solid #dcdce1;border-radius:4px}
+.letter{min-width:0;border-left:1px solid #ebebef;padding-left:20px}.full .letter{border-left:0;padding-left:0}.letter-title{min-height:36px}.toolbar{gap:3px}.letter-body{padding-top:5px}.template-label{display:block;margin:5px 0;color:var(--muted);font-size:12px}.template-row{display:flex;align-items:center;gap:6px}.template-row select{border:1px solid #c8c8d2;border-radius:5px;height:36px;min-width:0;flex:1;background:transparent;padding:0 9px}.template-entry{margin:4px 0 13px;display:inline-flex;align-items:center;gap:6px}.template-entry svg{width:15px;height:15px}.editor-actions{padding:3px 0 1px;gap:0}.editor-actions button{border:1px solid var(--line);background:none;color:var(--muted);padding:1px 7px}.editor-actions button:first-child{border-radius:100px 0 0 100px}.editor-actions button:last-child{border-radius:0 100px 100px 0;border-left:0}
+details.letter-section{margin-bottom:1px}details.letter-section summary{padding:4px 8px;background:var(--blue-gray);font-weight:700;cursor:pointer}details.letter-section summary::marker{font-size:13px}.letter-content{font:14px/1.45 Georgia,serif;padding:12px 8px 16px;min-height:300px}.addresses{display:flex;justify-content:space-between;gap:20px;min-height:120px;font-size:13px}.addresses p{margin:0 0 8px}.right{text-align:right}.chip{background:#e5ebef;border-radius:10px;padding:2px 6px;white-space:nowrap}.letter-content h2{font-size:17px;margin:13px 0}.letter-content p.doc-copy{margin:0 0 12px}.amounts{width:100%;border-collapse:collapse;margin:10px 0 7px}.amounts td{border-bottom:1px solid #dedee4;padding:5px 0}.amounts td:last-child{text-align:right}.amounts tr.total{font-weight:bold}.fieldbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;font-family:Inter,Arial,sans-serif;font-size:12px;margin-top:12px}.fieldbar select{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:4px;max-width:100%}.remove{background:none;border:0;padding:0 1px;margin-left:4px;font:12px Arial,sans-serif;color:var(--muted)}.section-pad{padding:10px;font-family:Georgia,serif}
+dialog{padding:0;width:min(400px,calc(100% - 32px));max-height:calc(100dvh - 32px);border:0;border-radius:8px;background:var(--paper);color:var(--ink);box-shadow:0 1px 3px #13132118}dialog::backdrop{background:rgba(18,18,29,.6)}dialog.wide{width:min(460px,calc(100% - 32px))}.modal-inner{padding:24px;display:flex;flex-direction:column;max-height:min(636px,calc(100dvh - 32px))}.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px;flex:none}.modal-head h2{font-size:20px;margin:0;font-weight:750}.modal-head .icon{margin:-5px -3px -5px 0}.modal-content{overflow:auto;line-height:1.4;color:#1e1d2b;min-height:0}.modal-content p{margin:0 0 10px}.modal-content p:last-child{margin-bottom:0}.footer{justify-content:flex-end;margin-top:18px;flex:none}.template-list{padding:0;list-style:none;margin:0;border:1px solid #d6d8e0;border-radius:6px;overflow:hidden}.template-list li+li{border-top:1px solid #dfe0e7}.template-list button{width:100%;text-align:left;padding:10px 12px;border:0;background:transparent;display:flex;align-items:center;justify-content:space-between;gap:8px}.template-list button:hover,.template-list button:focus-visible{background:var(--gold-light);outline-offset:-2px}.template-list small{color:var(--muted)}.empty{padding:22px 10px;text-align:center;color:var(--muted);background:#f1f2f7;border-radius:6px}.checks{display:grid;gap:7px;padding:3px 24px;font-size:12px}.checks label{display:flex;gap:8px;align-items:center;min-height:19px}.checks label:has(:disabled){color:#77778b}.checks .child{margin-left:24px}.checks .sub{margin-left:48px}.checks .department{margin-left:72px}.status{position:fixed;bottom:18px;right:22px;max-width:calc(100% - 44px);padding:10px 15px;background:var(--nav);color:white;border-radius:7px;box-shadow:0 4px 16px #0003;z-index:5}.status:empty{display:none}
+@media(max-width:920px){.app-bar{padding:0 12px}.nav span{padding:0 7px}.workspace{gap:16px;padding:8px 14px 20px 22px}.letter{padding-left:12px}.metrics-head{flex-wrap:wrap}.calc-nav{flex-wrap:wrap}.segments{font-size:12px}}
+@media(max-width:680px){.app-bar{grid-template-columns:auto 1fr}.nav{justify-content:flex-end;font-size:12px}.profile{display:none}.brand{font-size:15px;gap:7px}.demo{padding:8px 12px;gap:6px 12px}.demo .reset{margin:0}.workspace:not(.closed){grid-template-columns:1fr}.workspace:not(.closed) .calculation{display:none}.letter{padding-left:0;border-left:0}.project{padding-left:18px}.letter-content{padding-inline:3px}}
+</style>
+</head>
+<body>
+<div class="demo" aria-label="Prototype controls">
+  <strong>Prototype controls</strong>
+  <label>Scenario
+    <select id="scenario">
+      <option value="normal">Eligible templates</option>
+      <option value="empty">No eligible templates</option>
+      <option value="mixed">Mixed placeholders</option>
+    </select>
+  </label>
+  <label><input id="editPermission" type="checkbox" checked> Edit Bid letter</label>
+  <label><input id="basePermission" type="checkbox" checked> Preview &amp; export documents</label>
+  <label><input id="markupPermission" type="checkbox" checked> Export documents excluding markup</label>
+  <button class="text-button reset" id="reset">Reset demo</button>
+</div>
+<header class="app-bar">
+  <div class="brand"><span class="tile-icon" aria-hidden="true">▦</span> SCOPE+</div>
+  <nav class="nav" aria-label="ScopeX sections"><span>Home</span><span class="selected" aria-current="page">Projects</span><span>Contacts</span><span>Admin panel</span></nav>
+  <div class="profile"><span>Demo user<small>Production team</small></span><span aria-hidden="true">▾</span></div>
+</header>
+<div class="project"><span aria-hidden="true">←</span> Studio Campaign <i aria-hidden="true">☆ ♧</i></div>
+<main class="workspace" id="workspace">
+  <section class="calculation" aria-label="Calculation context">
+    <div class="calc-head"><div><h2>Initial KV <span aria-hidden="true">⌄ ☆</span></h2><small>● Draft</small></div><span class="pill primary">Create calculation</span></div>
+    <div class="calc-nav"><div class="segments"><span>Key Parameters</span><span class="active">Calculation</span><span>Summary</span></div><button id="letterToggle" class="text-button" aria-expanded="true">☷ Bid Letter</button></div>
+    <div class="depts"><div class="dept-tabs"><span>☷ Departments</span><span>▧ Visibility</span><span>◯ Tags</span></div><div class="dept-links" id="deptLinks"></div></div>
+    <div class="calc-card">
+      <div class="metrics">
+        <div class="metrics-head"><span>⌄ Calculated &amp; actual costs</span><span><strong>REVENUE:</strong> &nbsp; after Discount <strong>€ 6.25</strong> &nbsp; before Discount <strong>€ 6.25</strong></span></div>
+        <div class="metric-row planned"><span>CALC. COSTS<b>€ 5.00</b></span><span>CALC. MU<b>€ 1.25</b></span><span>CALC. MU ø<b>% 25</b></span><span>CALC. CM ø<b>% 20</b></span></div>
+        <div class="metric-row actual"><span>ACT. COSTS<b>€ 0.00</b></span><span>ACT. MU<b>€ 6.25</b></span><span>ACT. MU ø<b>% 0</b></span><span>ACT. CM ø<b>% 100</b></span></div>
+      </div>
+      <table class="calc-grid" aria-label="Sample department calculation">
+        <tbody><tr class="band"><th class="collapse" colspan="2">Collapse all</th><th colspan="4">KV GERMANY</th></tr>
+        <tr class="section"><th colspan="5">⌄ &nbsp;1. Pre-production</th><th class="money">€ 5.00</th></tr>
+        <tr class="spacer"><td colspan="6"></td></tr>
+        <tr><th colspan="2">RESEARCH, SCOUTING, RECCE</th><th>AGA</th><th>KSK</th><th>50A</th><th>M/Q</th></tr>
+        <tr><td>1.101</td><td>Location Manager</td><td class="num">□</td><td class="num">□</td><td class="num">□</td><td></td></tr>
+        <tr><td>1.102</td><td>Location Scout</td><td class="num">□</td><td class="num">□</td><td class="num">□</td><td></td></tr>
+        <tr><td>1.103</td><td>Location Archive Research</td><td class="num">□</td><td class="num">□</td><td class="num">□</td><td></td></tr>
+        <tr class="spacer"><td colspan="6"></td></tr>
+        <tr class="section"><th colspan="5">⌄ &nbsp;2. Cast</th><th class="money">€ 0.00</th></tr>
+        <tr class="section"><th colspan="5">⌄ &nbsp;3. Salaries</th><th class="money">€ 0.00</th></tr></tbody>
+      </table>
+      <div class="sheet-tabs"><span>KV Germany</span><span>KV Totals</span><span>Overtimes Germany</span></div>
+    </div>
+  </section>
+  <section class="letter" aria-labelledby="letterTitle">
+    <div class="letter-title"><h1 id="letterTitle">Bid letter</h1>
+      <div class="toolbar">
+        <button class="icon" id="preview" title="PDF preview" aria-label="PDF preview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button class="icon" id="export" title="Export to PDF" aria-label="Export to PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v13m-4-4 4 4 4-4m0-4h4v13H4V7h4"/></svg></button>
+        <button class="icon" id="fullscreen" title="Fullscreen view" aria-label="Fullscreen view" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5m0-5-6 6m-3 8H5v-5m0 5 6-6"/></svg></button>
+        <button class="icon" id="closeLetter" title="Close Bid letter" aria-label="Close Bid letter">×</button>
+      </div>
+    </div>
+    <div class="letter-body">
+      <div class="editor-actions"><button type="button" id="undo" title="Undo" aria-label="Undo">↶</button><button type="button" id="redo" title="Redo" aria-label="Redo">↷</button></div>
+      <label class="template-label" for="template">Choose template</label>
+      <div class="template-row"><select id="template"></select></div>
+      <button class="text-button template-entry" id="filtered"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 5h18M6 12h12m-9 7h6"/></svg>Templates excl. mark-up</button>
+      <details class="letter-section"><summary>Header</summary><div class="section-pad">Studio Campaign</div></details>
+      <details class="letter-section" open><summary>Content</summary>
+        <div class="letter-content">
+          <div class="addresses"><div><p><span class="chip">Demo Agency</span></p><p><span class="chip">Production team</span></p></div><div class="right"><p><span class="chip">Studio Campaign</span></p><p><span class="chip">Demo Production</span></p><p><span class="chip">Initial KV</span></p></div></div>
+          <h2 id="bidVersion">Bid version <span class="chip">Initial KV</span></h2>
+          <p class="doc-copy" id="intro"></p>
+          <table class="amounts" aria-label="Bid letter sample amounts"><tbody id="amounts"></tbody></table>
+          <div class="fieldbar" id="fieldbar">
+            <label for="field">Add placeholder</label><select id="field"></select><button class="pill" id="insert">Insert</button>
+          </div>
+        </div>
+      </details>
+      <details class="letter-section"><summary>Footer</summary><div class="section-pad">Demo Production</div></details>
+    </div>
+  </section>
+</main>
+<dialog id="dialog" aria-labelledby="dialogTitle"><div class="modal-inner"><div class="modal-head"><h2 id="dialogTitle"></h2><button class="icon" type="button" data-close aria-label="Close dialog">×</button></div><div class="modal-content" id="dialogContent"></div><div class="footer" id="dialogFooter"></div></div></dialog>
+<div id="status" class="status" role="status"></div>
+<script>
+'use strict';
+const byId = id => document.getElementById(id);
+const ui = Object.fromEntries(Array.from(document.querySelectorAll('[id]'), node => [node.id, node]));
+const departments = ['Pre-production','Cast','Salaries','Equipment','Art Department','Studio','Location','Stock, Negative & Processing','Postproduction','Insurance','Sundries','Music','Travel','BTS-Crew','Weather day'];
+const fields = {
+  preIncl: { label:'Pre-production', de:'Vorproduktion', token:'$Pre-production_department_total_incl_MU', cents:625, excludes:false },
+  preExcl: { label:'Pre-production', de:'Vorproduktion', token:'$Pre-production_department_total_excl_MU', cents:500, excludes:true },
+  castIncl: { label:'Cast', de:'Darsteller', token:'$Cast_department_total_incl_MU', cents:0, excludes:false },
+  castExcl: { label:'Cast', de:'Darsteller', token:'$Cast_department_total_excl_MU', cents:0, excludes:true }
+};
+const templates = [
+  {id:'de-incl',name:'[DE] Bid-Letter (inkl. Mark-up)',language:'de',kind:'Default',fields:['preIncl','castIncl']},
+  {id:'en-incl',name:'[EN] Bid letter (incl. Mark-up)',language:'en',kind:'Default',fields:['preIncl','castIncl']},
+  {id:'de-excl',name:'[DE] Bid-Letter (exkl. Mark-up)',language:'de',kind:'Default',fields:['preExcl','castExcl'],split:true},
+  {id:'en-excl',name:'[EN] Bid letter (excl. Mark-up)',language:'en',kind:'Default',fields:['preExcl','castExcl'],split:true},
+  {id:'custom-excl',name:'My template excl. Mark-up (Custom)',language:'en',kind:'Custom',fields:['preExcl'],split:true},
+  {id:'custom-other',name:'Studio template (Custom)',language:'en',kind:'Custom',fields:['preIncl']},
+  {id:'custom-mixed',name:'Mixed department totals (Custom)',language:'en',kind:'Custom',fields:['preIncl','castExcl']}
+];
+const isRestricted = keys => keys.some(key => fields[key].excludes);
+const money = cents => '€ '+(cents / 100).toFixed(2);
+const makeDocument = template => ({template, keys:[...template.fields]});
+let current = makeDocument(templates[0]);
+let undoStack = [];
+let redoStack = [];
+let lastFocus;
+let modalCancel;
+let statusTimer;
+
+function element(tag, text, className) {
+  const node = document.createElement(tag);
+  if (text) node.textContent = text;
+  if (className) node.className = className;
+  return node;
+}
+function availableTemplates() {
+  if (ui.scenario.value === 'empty') return templates.filter(template => !isRestricted(template.fields));
+  return templates;
+}
+function resetLetter() {
+  current = makeDocument(templates[0]);
+  if (ui.scenario.value === 'mixed') current = makeDocument(templates.find(template => template.id === 'custom-mixed'));
+  undoStack = [];
+  redoStack = [];
+  render();
+}
+function updateDocument(next) {
+  undoStack.push(current);
+  redoStack = [];
+  current = next;
+  render();
+}
+function amountRows(doc) {
+  const de = doc.template.language === 'de';
+  const rows = doc.keys.map(key => {
+    const info = fields[key];
+    const label = de ? info.de : info.label;
+    const suffix = info.excludes ? (de ? ' (exkl. Mark-up)' : ' (excl. mark-up)') : '';
+    return {key,label:label+suffix,cents:info.cents};
+  });
+  if (doc.template.split) rows.push({label:'Mark-up',cents:125});
+  rows.push({label:de ? 'Gesamtangebot' : 'Total offer',cents:625,total:true});
+  return rows;
+}
+function render() {
+  const editable = ui.editPermission.checked;
+  ui.template.replaceChildren(...availableTemplates().map(template => new Option(template.name,template.id)));
+  ui.template.value = current.template.id;
+  ui.template.disabled = !editable;
+  ui.filtered.hidden = !editable;
+  ui.fieldbar.hidden = !editable;
+  ui.undo.disabled = !editable || !undoStack.length;
+  ui.redo.disabled = !editable || !redoStack.length;
+  ui.preview.disabled = !ui.basePermission.checked;
+  ui.export.disabled = !ui.basePermission.checked;
+  const de = current.template.language === 'de';
+  ui.bidVersion.firstChild.nodeValue = de ? 'Angebotsversion ' : 'Bid version ';
+  ui.intro.textContent = current.template.kind === 'Custom'
+    ? (de ? 'Übersicht der Produktionskosten' : 'Production cost overview')
+    : (de ? 'Auf Grundlage des Briefings ergeben sich folgende Produktionskosten.' : 'Based on the briefing, we estimate the following production costs.');
+  ui.amounts.replaceChildren();
+  for (const item of amountRows(current)) {
+    const row = element('tr',null,item.total ? 'total' : '');
+    const valueCell = element('td');
+    const value = element('span',money(item.cents),item.key ? 'chip' : '');
+    if (item.key) value.title = fields[item.key].token;
+    valueCell.append(value);
+    if (item.key && editable) {
+      const remove = element('button','×','remove');
+      remove.type = 'button';
+      remove.setAttribute('aria-label','Remove '+fields[item.key].token);
+      remove.title = 'Remove placeholder';
+      remove.onclick = () => {
+        const keys = current.keys.filter(key => key !== item.key);
+        updateDocument({...current,keys});
+        ui.field.focus();
+      };
+      valueCell.append(remove);
+    }
+    row.append(element('td',item.label),valueCell);
+    ui.amounts.append(row);
+  }
+  ui.field.replaceChildren(...Object.entries(fields).map(([key,info]) => {
+    const option = new Option(info.token,key);
+    option.disabled = current.keys.includes(key);
+    return option;
+  }));
+  const firstUnused = Array.from(ui.field.options).find(option => !option.disabled);
+  ui.field.value = firstUnused?.value ?? '';
+  ui.insert.disabled = !firstUnused;
+}
+function status(message) {
+  clearTimeout(statusTimer);
+  ui.status.textContent = message;
+  statusTimer = setTimeout(() => {ui.status.textContent='';},4500);
+}
+function showDialog(title, body, actions, {wide=false,cancel=closeDialog}={}) {
+  ui.dialogTitle.textContent = title;
+  ui.dialogContent.replaceChildren(...body);
+  ui.dialog.classList.toggle('wide',wide);
+  modalCancel = cancel;
+  const buttons = actions.map(action => {
+    const button = element('button',action.label,action.primary ? 'pill primary' : 'pill');
+    button.type = 'button';
+    button.onclick = action.onClick;
+    return button;
+  });
+  ui.dialogFooter.replaceChildren(...buttons);
+  if (!ui.dialog.open) {
+    lastFocus = document.activeElement;
+    ui.dialog.showModal();
+  }
+  const first = ui.dialogContent.querySelector('button,input:not(:disabled)') || buttons[0];
+  first?.focus();
+}
+function closeDialog() {
+  if (!ui.dialog.open) return;
+  ui.dialog.close();
+  if (lastFocus?.isConnected) lastFocus.focus();
+}
+const cancelAction = onClick => ({label:'Cancel',onClick:onClick ?? closeDialog});
+ui.dialog.querySelector('[data-close]').onclick = () => modalCancel();
+ui.dialog.addEventListener('cancel', event => {event.preventDefault();modalCancel();});
+function filteredList() {
+  const eligible = availableTemplates().filter(template => isRestricted(template.fields));
+  let body;
+  if (eligible.length) {
+    const list = element('ul',null,'template-list');
+    for (const candidate of eligible) {
+      const row = element('li');
+      const button = element('button');
+      button.type = 'button';
+      button.append(element('span',candidate.name),element('small',candidate.id === current.template.id ? 'Selected' : candidate.kind));
+      button.onclick = () => askTemplateChange(candidate,true);
+      row.append(button);
+      list.append(row);
+    }
+    body = list;
+  } else {
+    body = element('p','No Bid letter templates contain placeholders excluding mark-up.','empty');
+  }
+  showDialog('Templates excl. mark-up',[body],[{label:'Close',onClick:closeDialog}],{wide:true});
+}
+function askTemplateChange(template, fromFiltered) {
+  const cancel = fromFiltered ? filteredList : closeDialog;
+  showDialog('Change template?',[
+    element('p','If you select another template, all the changes in the current Bid letter document will be overwritten.')
+  ],[cancelAction(cancel),{label:'Change and overwrite',primary:true,onClick:() => {
+    updateDocument(makeDocument(template));
+    closeDialog();
+    status('Bid letter template applied.');
+  }}],{cancel});
+}
+function exportOptions() {
+  const checks = element('div',null,'checks');
+  function check(label, className='', checked=false, disabled=false) {
+    const row = element('label',null,className);
+    const box = element('input');
+    box.type = 'checkbox';
+    box.checked = checked;
+    box.disabled = disabled;
+    row.append(box,element('span',label));
+    checks.append(row);
+    return box;
+  }
+  const every = check('Export all documents');
+  check('Bid letter','child',true,true);
+  const cost = check('Cost Breakdown','child');
+  const summary = check('Summary','sub');
+  const calculation = check('Calculation','sub');
+  const breakdown = departments.map(name => check(name,'department'));
+  const options = [cost,summary,calculation,...breakdown];
+  const set = (boxes,checked) => boxes.forEach(box => {box.checked=checked;box.indeterminate=false;});
+  const sync = (box,children) => {
+    box.checked = children.every(child => child.checked);
+    box.indeterminate = !box.checked && children.some(child => child.checked || child.indeterminate);
+  };
+  checks.addEventListener('change', event => {
+    const selected = event.target;
+    if (selected === every) set(options,every.checked);
+    if (selected === cost) set([summary,calculation,...breakdown],cost.checked);
+    if (selected === calculation) set(breakdown,calculation.checked);
+    sync(calculation,breakdown);
+    sync(cost,[summary,calculation]);
+    sync(every,[cost]);
+  });
+  showDialog('Export',[checks],[cancelAction(),{label:'Export',primary:true,onClick:() =>
+    checkOutput('export',options.some(box => box.checked))}],{wide:true});
+}
+function checkOutput(action,extraDocuments=false) {
+  if (!ui.basePermission.checked) return;
+  if (!isRestricted(current.keys)) {
+    closeDialog();
+    deliverPdf(action,extraDocuments);
+    return;
+  }
+  const preview = action === 'preview';
+  if (!ui.markupPermission.checked) {
+    const title = 'Export not possible';
+    const verb = preview ? 'preview' : 'export';
+    showDialog(title,[
+      element('p','This document contains values excluding markup, which you are not authorized to '+verb+'.'),
+      element('p','Please remove the placeholders from your document to proceed with the '+verb+', or contact your admin to request the required permission.')
+    ],[cancelAction()]);
+    return;
+  }
+  const title = preview ? 'Preview documents excl. mark-up' : 'Export documents excl. mark-up';
+  const verb = preview ? 'preview' : 'export';
+  const label = preview ? 'Preview anyway' : 'Export anyway';
+  showDialog(title,[
+    element('p','This document contains values excluding mark-up. Are you sure you want to '+verb+' it?')
+  ],[cancelAction(),{label,primary:true,onClick:() => {
+    closeDialog();
+    deliverPdf(action,extraDocuments);
+  }}]);
+}
+
+// The prototype creates a standalone sample PDF from the editor state.
+function pdfString(value) {
+  const bytes = Array.from(value, char => char === '€' ? 128 : char.charCodeAt(0));
+  return '('+bytes.map(byte => {
+    if (byte < 32 || byte > 255) return '?';
+    if (byte > 126 || byte === 40 || byte === 41 || byte === 92) return String.fromCharCode(92)+byte.toString(8).padStart(3,'0');
+    return String.fromCharCode(byte);
+  }).join('')+')';
+}
+function buildPdf(doc) {
+  const de = doc.template.language === 'de';
+  const items = [
+    '0.09 0.22 0.31 rg 56 778 483 2 re f',
+    '0.16 0.16 0.21 rg',
+    pdfText(56,748,12,'/F2','DEMO PRODUCTION'),
+    pdfText(56,678,27,'/F2',de ? 'Produktionsangebot' : 'Production bid'),
+    pdfText(56,653,12,'/F1','Studio Campaign / Initial KV'),
+    pdfText(56,606,11,'/F1',de ? 'An: Demo Agency' : 'To: Demo Agency'),
+    pdfText(56,548,13,'/F2',de ? 'Produktionskosten' : 'Production costs')
+  ];
+  for (const [index,item] of amountRows(doc).entries()) {
+    const y = 520 - index * 28;
+    const font = item.total ? '/F2' : '/F1';
+    items.push('0.85 0.86 0.89 RG 56 '+(y-8)+' m 539 '+(y-8)+' l S');
+    items.push(pdfText(56,y,11,font,item.label),pdfText(483,y,11,font,money(item.cents)));
+  }
+  items.push(pdfText(56,58,10,'/F1','ScopeX prototype - sample data'));
+  const stream = items.join('\n')+'\n';
+  const objects = [
+    '<< /Type /Catalog /Pages 2 0 R >>',
+    '<< /Type /Pages /Count 1 /Kids [3 0 R] >>',
+    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>',
+    '<< /Length '+stream.length+' >>\nstream\n'+stream+'endstream'
+  ];
+  let pdf = '%PDF-1.4\n';
+  const offsets = objects.map((item,index) => {
+    const offset = pdf.length;
+    pdf += (index+1)+' 0 obj\n'+item+'\nendobj\n';
+    return offset;
+  });
+  const xref = pdf.length;
+  pdf += 'xref\n0 '+(objects.length+1)+'\n0000000000 65535 f \n';
+  pdf += offsets.map(offset => String(offset).padStart(10,'0')+' 00000 n \n').join('');
+  pdf += 'trailer\n<< /Size '+(objects.length+1)+' /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF\n';
+  return new Blob([pdf],{type:'application/pdf'});
+}
+function pdfText(x,y,size,font,value) {
+  return 'BT '+font+' '+size+' Tf '+x+' '+y+' Td '+pdfString(value)+' Tj ET';
+}
+function deliverPdf(action,extraDocuments) {
+  const url = URL.createObjectURL(buildPdf(current));
+  const link = element('a');
+  link.href = url;
+  if (action === 'preview') {
+    link.target = '_blank';
+    link.rel = 'noopener';
+  } else {
+    link.download = '2026-11-20_Studio-Campaign_Bid_Initial-KV_DEMO.pdf';
+  }
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url),60000);
+  if (action === 'export') {
+    status(extraDocuments ? 'Bid letter PDF download started. Cost Breakdown is outside the prototype.' : 'Bid letter PDF download started.');
+  }
+}
+function setSheet(open) {
+  ui.workspace.classList.toggle('closed',!open);
+  ui.workspace.classList.remove('full');
+  ui.fullscreen.setAttribute('aria-pressed','false');
+  ui.letterToggle.setAttribute('aria-expanded',String(open));
+  if (!open) ui.letterToggle.focus();
+}
+
+for (const name of departments) ui.deptLinks.append(element('span',name));
+ui.filtered.onclick = filteredList;
+ui.preview.onclick = () => checkOutput('preview');
+ui.export.onclick = exportOptions;
+ui.closeLetter.onclick = () => setSheet(false);
+ui.letterToggle.onclick = () => setSheet(ui.workspace.classList.contains('closed'));
+ui.fullscreen.onclick = () => {
+  const full = ui.workspace.classList.toggle('full');
+  ui.fullscreen.setAttribute('aria-pressed',String(full));
+};
+ui.template.onchange = () => {
+  const template = templates.find(candidate => candidate.id === ui.template.value);
+  ui.template.value = current.template.id;
+  if (template && template.id !== current.template.id) askTemplateChange(template,false);
+};
+ui.insert.onclick = () => {
+  if (!ui.field.value) return;
+  updateDocument({...current,keys:[...current.keys,ui.field.value]});
+  ui.field.focus();
+};
+ui.undo.onclick = () => {
+  redoStack.push(current);
+  current = undoStack.pop();
+  render();
+  if (ui.undo.disabled) ui.redo.focus();
+};
+ui.redo.onclick = () => {
+  undoStack.push(current);
+  current = redoStack.pop();
+  render();
+  if (ui.redo.disabled) ui.undo.focus();
+};
+ui.scenario.onchange = resetLetter;
+for (const permission of [ui.editPermission,ui.basePermission,ui.markupPermission]) permission.onchange = render;
+ui.reset.onclick = () => {
+  ui.scenario.value = 'normal';
+  ui.editPermission.checked = ui.basePermission.checked = ui.markupPermission.checked = true;
+  ui.status.textContent = '';
+  setSheet(true);
+  resetLetter();
+};
+render();
+</script>
+</body>
+</html>
