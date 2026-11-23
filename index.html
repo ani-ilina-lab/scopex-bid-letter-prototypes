@@ -8,6 +8,8 @@
 :root{--nav:#183c53;--paper:#fafaff;--bg:#f7f7fb;--ink:#232337;--muted:#62627b;--gold:#877136;--gold-text:#795e12;--gold-light:#eeebe3;--line:#d3d2da;--blue-gray:#e0e6eb;--focus:#316eaf;font-family:Inter,Arial,sans-serif;color:var(--ink);background:var(--bg);font-size:14px}
 *{box-sizing:border-box}[hidden]{display:none!important}body{margin:0}button,input,select{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.48}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--focus);outline-offset:2px}button,select{max-width:100%}button.icon{display:grid;place-items:center;padding:4px;width:32px;height:32px;border:0;background:transparent;border-radius:50%;font-size:20px;flex:none}button.icon:hover{background:#dce1ea88}.icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.pill{border:1px solid var(--gold);border-radius:100px;padding:3px 9px;color:var(--gold-text);background:transparent;font-weight:650;line-height:1.2;min-height:25px}.pill:hover{background:#ece7da}.primary{background:var(--gold);color:var(--paper)}.primary:hover{background:#715d28}.text-button{padding:5px 8px;border:0;border-radius:5px;background:none;color:var(--gold-text);font-weight:600}.text-button:hover{background:var(--gold-light)}
 .demo{display:flex;gap:10px 20px;flex-wrap:wrap;align-items:center;padding:8px 24px;background:#eef2f6;border-bottom:1px solid #d8dfe7;font-size:12px}.demo strong{margin-right:5px}.demo label{display:flex;align-items:center;gap:5px}.demo .reset{margin-left:auto}.demo select{padding:3px 6px;border:1px solid #c2cbd7;border-radius:4px;background:white}input[type=checkbox]{accent-color:var(--gold);margin:0;width:16px;height:16px;flex:none}
+.demo .markup-access{display:flex;align-items:center;gap:7px;min-width:0;margin:0;padding:0;border:0}.markup-access-label{font-weight:550}.permission-choices{display:inline-flex;flex:none;gap:2px;padding:2px;border:1px solid #c2cbd7;border-radius:6px;background:#fafaff}.permission-choices label{position:relative;display:block;cursor:pointer}.permission-choices input{position:absolute;width:1px;height:1px;opacity:0}.permission-choices span{display:block;padding:3px 8px;border-radius:4px;color:#494b60}.permission-choices input:checked+span{background:#183c53;color:#fafaff}.permission-choices input:focus-visible+span{outline:2px solid var(--focus);outline-offset:1px}.permission-choices label:hover span{box-shadow:inset 0 0 0 1px #183c5350}
+@media(max-width:540px){.demo .markup-access{flex-wrap:wrap}}
 .app-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:48px;background:var(--nav);color:var(--paper);padding:0 24px;gap:16px}.brand{display:flex;align-items:center;gap:19px;font-size:20px;letter-spacing:-.25px}.tile-icon{font-size:21px;line-height:1}.nav{display:flex;align-items:stretch;height:100%;white-space:nowrap}.nav span{display:grid;place-items:center;padding:0 12px;font-weight:600}.nav .selected{background:#ffffff20;box-shadow:inset 0 -3px #9a884f}.profile{justify-self:end;background:var(--paper);color:var(--ink);padding:3px 12px;border-radius:7px;min-width:160px;display:flex;align-items:center;justify-content:space-between;gap:20px}.profile small{display:block;color:var(--muted);font-size:11px}
 .project{display:flex;gap:13px;align-items:center;padding:12px 27px;height:48px;font-size:16px;font-weight:700}.project i{color:var(--muted);font-style:normal;font-weight:400}.workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;padding:8px 24px 20px 48px;min-height:calc(100dvh - 135px)}.workspace.full{grid-template-columns:1fr}.workspace.full .calculation{display:none}.workspace.full .letter-body{max-width:900px;margin:auto}.workspace.closed{grid-template-columns:1fr}.workspace.closed .letter{display:none}
 .calculation{min-width:0;position:relative}.calc-head,.toolbar,.letter-title,.editor-actions,.footer{display:flex;align-items:center;gap:8px}.calc-head,.letter-title{justify-content:space-between}.calc-head h2,.letter h1{margin:0;font-size:19px}.calc-head h2{font-size:16px}.calc-head small{display:block;margin-top:4px;color:var(--muted)}.calc-nav{display:flex;align-items:center;justify-content:space-between;margin-top:15px;gap:8px}.segments{display:flex;white-space:nowrap}.segments span{padding:3px 7px;border:1px solid #d7d2c1;color:var(--gold-text);font-weight:600;line-height:1}.segments span:first-child{border-radius:4px 0 0 4px}.segments span:last-child{border-radius:0 4px 4px 0}.segments .active{background:var(--gold);color:white;border-color:var(--gold)}
@@ -32,7 +34,13 @@ dialog{padding:0;width:min(400px,calc(100% - 32px));max-height:calc(100dvh - 32p
   </label>
   <label><input id="editPermission" type="checkbox" checked> Edit Bid letter</label>
   <label><input id="basePermission" type="checkbox" checked> Preview &amp; export documents</label>
-  <label><input id="markupPermission" type="checkbox" checked> Export documents excluding markup</label>
+  <div class="markup-access" role="group" aria-labelledby="markup-access-label">
+    <span class="markup-access-label" id="markup-access-label">Export documents excluding markup</span>
+    <div class="permission-choices">
+      <label><input id="markupPermission" type="radio" name="markup-permission" value="allowed" checked><span>Allowed</span></label>
+      <label><input id="markupPermissionBlocked" type="radio" name="markup-permission" value="blocked"><span>Blocked</span></label>
+    </div>
+  </div>
   <button class="text-button reset" id="reset">Reset demo</button>
 </div>
 <header class="app-bar">
@@ -326,11 +334,13 @@ function checkOutput(action,extraDocuments=false) {
     ],[cancelAction()]);
     return;
   }
-  const title = preview ? 'Preview documents excl. mark-up' : 'Export documents excl. mark-up';
-  const verb = preview ? 'preview' : 'export';
-  const label = preview ? 'Preview anyway' : 'Export anyway';
+  const title = preview ? 'Preview bid letter' : 'Export documents excl. mark-up';
+  const label = preview ? 'Open PDF preview' : 'Export anyway';
+  const message = preview
+    ? 'The PDF includes amounts before mark-up.'
+    : 'This document contains values excluding mark-up. Are you sure you want to export it?';
   showDialog(title,[
-    element('p','This document contains values excluding mark-up. Are you sure you want to '+verb+' it?')
+    element('p',message)
   ],[cancelAction(),{label,primary:true,onClick:() => {
     closeDialog();
     deliverPdf(action,extraDocuments);
@@ -447,7 +457,7 @@ ui.redo.onclick = () => {
   if (ui.redo.disabled) ui.undo.focus();
 };
 ui.scenario.onchange = resetLetter;
-for (const permission of [ui.editPermission,ui.basePermission,ui.markupPermission]) permission.onchange = render;
+for (const permission of [ui.editPermission,ui.basePermission,ui.markupPermission,ui.markupPermissionBlocked]) permission.onchange = render;
 ui.reset.onclick = () => {
   ui.scenario.value = 'normal';
   ui.editPermission.checked = ui.basePermission.checked = ui.markupPermission.checked = true;
